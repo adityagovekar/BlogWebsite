@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>simple blog · frontend</title>
+  <!-- clean, modern, no external deps -->
+  <style>
+    /* ----- RESET / BASE ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f4f7fb;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #1e2b37;
+      padding: 2rem 1rem;
+    }
+
+    .blog-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px -12px rgba(0,20,30,0.15);
+      overflow: hidden;
+    }
+
+    /* ----- HEADER & NAV ----- */
+    .top-bar {
+      background: #ffffffdd;
+      backdrop-filter: blur(4px);
+      border-bottom: 1px solid #e4eef8;
+      padding: 1rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.2rem 2rem;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo-icon {
+      background: #1e3c5c;
+      color: white;
+      font-weight: 600;
+      font-size: 1.6rem;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      box-shadow: 0 6px 10px rgba(0,60,100,0.1);
+    }
+
+    .logo-text h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: #0b2a3e;
+    }
+
+    .logo-text p {
+      font-size: 0.8rem;
+      color: #5b6f80;
+      font-weight: 400;
+    }
+
+    /* main navigation — POST & other options */
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.2rem;
+      background: #edf3f8;
+      padding: 0.3rem;
+      border-radius: 60px;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      padding: 0.6rem 1.4rem;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #264a66;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-btn i { font-style: normal; font-weight: 400; font-size: 1.2rem; } /* simple icon replacements */
+
+    .nav-btn:hover {
+      background: #dae6f0;
+      color: #0f344d;
+    }
+
+    .nav-btn.active {
+      background: white;
+      color: #0c2f46;
+      box-shadow: 0 2px 8px rgba(0,35,60,0.1);
+    }
+
+    /* search bar area */
+    .search-section {
+      display: flex;
+      align-items: center;
+      background: white;
+      border: 1px solid #cddde9;
+      border-radius: 50px;
+      padding: 0.2rem 0.2rem 0.2rem 1.2rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      min-width: 240px;
+    }
+
+    .search-section input {
+      border: none;
+      padding: 0.5rem 0;
+      font-size: 0.95rem;
+      background: transparent;
+      width: 100%;
+      outline: none;
+      color: #1f3c4f;
+    }
+
+    .search-section input::placeholder {
+      color: #8ca3b7;
+      font-weight: 300;
+    }
+
+    .search-btn {
+      background: #1e3c5c;
+      border: none;
+      color: white;
+      padding: 0.5rem 1.4rem;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.15s;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+    }
+
+    .search-btn:hover {
+      background: #123049;
+    }
+
+    /* ----- MAIN LAYOUT (content + sidebar) ----- */
+    .content-pane {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 2rem 2rem 2.5rem 2rem;
+    }
+
+    /* blog posts feed */
+    .posts-feed {
+      flex: 2.5;
+      min-width: 300px;
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-label span {
+      background: #dbe9f5;
+      padding: 0.3rem 0.9rem;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #1d4968;
+      letter-spacing: 0.3px;
+    }
+
+    .post-card {
+      background: #ffffff;
+      border: 1px solid #e7f0f8;
+      border-radius: 24px;
+      padding: 1.6rem;
+      margin-bottom: 1.6rem;
+      box-shadow: 0 6px 12px -8px rgba(30, 60, 80, 0.08);
+      transition: 0.2s;
+    }
+
+    .post-card:hover {
+      border-color: #cbdbe9;
+      box-shadow: 0 12px 22px -12px rgba(20,60,90,0.18);
+    }
+
+    .post-meta {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #52758b;
+      margin-bottom: 0.6rem;
+    }
+
+    .post-meta .date {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .post-meta .date::before {
+      content: "📅";
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    .post-category {
+      background: #e5eef8;
+      padding: 0.2rem 0.8rem;
+      border-radius: 30px;
+      font-weight: 500;
+      color: #23577b;
+    }
+
+    .post-title {
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      margin: 0.3rem 0 0.8rem 0;
+      color: #102c3e;
+      line-height: 1.3;
+    }
+
+    .post-excerpt {
+      color: #385b72;
+      margin-bottom: 1.2rem;
+      font-size: 1rem;
+    }
+
+    .post-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      align-items: center;
+      border-top: 1px dashed #c6d9e9;
+      padding-top: 1rem;
+      margin-top: 0.4rem;
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #2d5a7c;
+      cursor: pointer;
+      padding: 0.3rem 0.5rem;
+      border-radius: 30px;
+      transition: 0.1s;
+    }
+
+    .action-btn.like:hover { background: #ffe9e9; color: #b34a4a; }
+    .action-btn.comment:hover { background: #e2effa; color: #1c4d72; }
+    .action-btn.share:hover { background: #e3f0ea; color: #1d6b4c; }
+
+    /* ----- SIDEBAR (extra options) ----- */
+    .sidebar {
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .sidebar-card {
+      background: #f9fcff;
+      border-radius: 24px;
+      padding: 1.8rem 1.4rem;
+      margin-bottom: 1.8rem;
+      border: 1px solid #e4eef6;
+    }
+
+    .sidebar-title {
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #143e59;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sidebar-title i { font-size: 1.2rem; opacity: 0.8; }
+
+    .create-post-box {
+      background: #ddeeff;
+      border-radius: 20px;
+      padding: 1.5rem;
+      text-align: center;
+      border: 2px dashed #9cb9d3;
+    }
+
+    .create-post-box p {
+      font-weight: 500;
+      color: #133e58;
+      margin-bottom: 1rem;
+    }
+
+    .big-post-btn {
+      background: #1e3c5c;
+      border: none;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 0.9rem 1.2rem;
+      border-radius: 40px;
+      width: 100%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: 0.15s;
+      box-shadow: 0 6px 14px rgba(20,70,100,0.2);
+    }
+
+    .big-post-btn:hover {
+      background: #0f2d43;
+      transform: scale(1.01);
+    }
+
+    .category-list {
+      list-style: none;
+    }
+
+    .category-list li {
+      padding: 0.7rem 0;
+      border-bottom: 1px solid #cde0ed;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 450;
+      color: #1f4d6b;
+      cursor: default;
+    }
+
+    .category-list li:last-child { border: none; }
+
+    .badge {
+      background: #b7d3e9;
+      padding: 0.2rem 0.7rem;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-left: auto;
+      color: #1a3f59;
+    }
+
+    /* quick options (extra stuff) */
+    .option-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .option-tag {
+      background: white;
+      border: 1px solid #bbd3e6;
+      padding: 0.4rem 1rem;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #1b4b6e;
+      cursor: pointer;
+      transition: 0.1s;
+    }
+
+    .option-tag:hover {
+      background: #ddeeff;
+      border-color: #6b9bc0;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #d1e2f0;
+      margin: 1rem 0;
+    }
+
+    /* footer */
+    .blog-footer {
+      background: #ecf3fa;
+      padding: 1.5rem 2rem;
+      font-size: 0.9rem;
+      color: #335f7a;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #c8ddec;
+    }
+
+    .footer-links span {
+      margin-right: 1.8rem;
+      cursor: default;
+      color: #2a5779;
+      font-weight: 450;
+    }
+
+    /* placeholder icons using unicode / text */
+    i.emoji-icon { font-style: normal; }
+
+    /* responsive */
+    @media (max-width: 700px) {
+      .top-bar { flex-direction: column; align-items: stretch; }
+      .search-section { width: 100%; }
+      .content-pane { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="blog-wrapper">
+  <!-- header with navigation, logo and search bar -->
+  <header class="top-bar">
+    <div class="logo-area">
+      <div class="logo-icon">✎</div>
+      <div class="logo-text">
+        <h1>pen & page</h1>
+        <p>simple thoughts</p>
+      </div>
+    </div>
+
+    <!-- nav links: post & other options (Home, Posts, Write) -->
+    <nav class="nav-links">
+      <button class="nav-btn active"><i>📘</i> Home</button>
+      <button class="nav-btn"><i>📰</i> Posts</button>
+      <button class="nav-btn"><i>✍️</i> Write</button>
+      <button class="nav-btn"><i>🔖</i> Saved</button>
+    </nav>
+
+    <!-- search bar -->
+    <div class="search-section">
+      <input type="text" placeholder="Search posts, topics..." aria-label="search">
+      <button class="search-btn">Go</button>
+    </div>
+  </header>
+
+  <!-- main area: posts feed + sidebar -->
+  <div class="content-pane">
+    <!-- BLOG POSTS SECTION (left column) -->
+    <main class="posts-feed">
+      <div class="section-label">
+        <span>📌 LATEST STORIES</span>
+      </div>
+
+      <!-- post 1 -->
+      <article class="post-card">
+        <div class="post-meta">
+          <span class="date">March 10, 2025</span>
+          <span class="post-category">design</span>
+        </div>
+        <h2 class="post-title">frontend simplicity: less is more</h2>
+        <p class="post-excerpt">
+          Exploring minimal layouts that focus on readability and calm. No complex frameworks — just plain ideas.
+        </p>
+        <div class="post-actions">
+          <button class="action-btn like"><i>❤️</i> 24</button>
+          <button class="action-btn comment"><i>💬</i> 8</button>
+          <button class="action-btn share"><i>↗️</i> share</button>
+          <span style="flex:1; text-align:right; font-size:0.85rem; color:#517e9b;">3 min read</span>
+        </div>
+      </article>
+
+      <!-- post 2 -->
+      <article class="post-card">
+        <div class="post-meta">
+          <span class="date">March 5, 2025</span>
+          <span class="post-category">journal</span>
+        </div>
+        <h2 class="post-title">learning to observe</h2>
+        <p class="post-excerpt">
+          Sometimes the smallest moments bring the biggest ideas. A short reflection on daily rituals.
+        </p>
+        <div class="post-actions">
+          <button class="action-btn like"><i>❤️</i> 17</button>
+          <button class="action-btn comment"><i>💬</i> 5</button>
+          <button class="action-btn share"><i>↗️</i> share</button>
+          <span style="flex:1; text-align:right; font-size:0.85rem; color:#517e9b;">4 min read</span>
+        </div>
+      </article>
+
+      <!-- post 3 -->
+      <article class="post-card">
+        <div class="post-meta">
+          <span class="date">February 27, 2025</span>
+          <span class="post-category">code</span>
+        </div>
+        <h2 class="post-title">building a blog UI with only HTML/CSS</h2>
+        <p class="post-excerpt">
+          No javascript, no frameworks. Just semantic markup and a bit of styling. Refreshing, isn't it?
+        </p>
+        <div class="post-actions">
+          <button class="action-btn like"><i>❤️</i> 43</button>
+          <button class="action-btn comment"><i>💬</i> 12</button>
+          <button class="action-btn share"><i>↗️</i> share</button>
+          <span style="flex:1; text-align:right; font-size:0.85rem; color:#517e9b;">5 min read</span>
+        </div>
+      </article>
+    </main>
+
+    <!-- SIDEBAR (extra options & Post call to action) -->
+    <aside class="sidebar">
+      <!-- create / post card -->
+      <div class="sidebar-card create-post-box">
+        <p>✎  share your own story</p>
+        <button class="big-post-btn"><i>📝</i> Create new post</button>
+      </div>
+
+      <!-- options card: categories & stuff -->
+      <div class="sidebar-card">
+        <div class="sidebar-title"><i>📌</i> Explore</div>
+        <ul class="category-list">
+          <li>📚 All posts <span class="badge">28</span></li>
+          <li>✨ writing tips <span class="badge">7</span></li>
+          <li>🎨 design <span class="badge">12</span></li>
+          <li>🧘 lifestyle <span class="badge">9</span></li>
+        </ul>
+        <hr>
+        <div class="sidebar-title"><i>⚙️</i> more options</div>
+        <div class="option-tags">
+          <span class="option-tag">📋 drafts</span>
+          <span class="option-tag">🏷️ tags</span>
+          <span class="option-tag">📎 media</span>
+          <span class="option-tag">🔔 notifications</span>
+          <span class="option-tag">📊 stats</span>
+        </div>
+      </div>
+
+      <!-- extra card: bookmark or something -->
+      <div class="sidebar-card" style="background:#ecf5fc;">
+        <div style="display:flex; gap:1rem; align-items:center;">
+          <span style="font-size:2rem;">🔎</span>
+          <div>
+            <strong style="color:#14415e;">advanced search?</strong>
+            <p style="font-size:0.9rem; color:#3a6180;">filter by date / author</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- simple footer -->
+  <footer class="blog-footer">
+    <div>© 2025 pen & page — simple blog demo</div>
+    <div class="footer-links">
+      <span>about</span>
+      <span>contact</span>
+      <span>privacy</span>
+      <span>rss</span>
+    </div>
+  </footer>
+</div>
+<!-- no JS, pure frontend structure. all interactive elements are placeholders -->
+</body>
+</html>
