@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Write · pen & page</title>
+  <style>
+    /* ----- RESET / BASE ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f4f7fb;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #1e2b37;
+      padding: 2rem 1rem;
+    }
+
+    .blog-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px -12px rgba(0,20,30,0.15);
+      overflow: hidden;
+    }
+
+    /* ----- HEADER & NAV ----- */
+    .top-bar {
+      background: #ffffffdd;
+      backdrop-filter: blur(4px);
+      border-bottom: 1px solid #e4eef8;
+      padding: 1rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.2rem 2rem;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      background: #1e3c5c;
+      color: white;
+      font-weight: 600;
+      font-size: 1.6rem;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      box-shadow: 0 6px 10px rgba(0,60,100,0.1);
+    }
+
+    .logo-text h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: #0b2a3e;
+    }
+
+    .logo-text p {
+      font-size: 0.8rem;
+      color: #5b6f80;
+      font-weight: 400;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.2rem;
+      background: #edf3f8;
+      padding: 0.3rem;
+      border-radius: 60px;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      padding: 0.6rem 1.4rem;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #264a66;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    .nav-btn i { font-style: normal; font-weight: 400; font-size: 1.2rem; }
+
+    .nav-btn:hover {
+      background: #dae6f0;
+      color: #0f344d;
+    }
+
+    .nav-btn.active {
+      background: white;
+      color: #0c2f46;
+      box-shadow: 0 2px 8px rgba(0,35,60,0.1);
+    }
+
+    .search-section {
+      display: flex;
+      align-items: center;
+      background: white;
+      border: 1px solid #cddde9;
+      border-radius: 50px;
+      padding: 0.2rem 0.2rem 0.2rem 1.2rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      min-width: 240px;
+    }
+
+    .search-section input {
+      border: none;
+      padding: 0.5rem 0;
+      font-size: 0.95rem;
+      background: transparent;
+      width: 100%;
+      outline: none;
+      color: #1f3c4f;
+    }
+
+    .search-section input::placeholder {
+      color: #8ca3b7;
+      font-weight: 300;
+    }
+
+    .search-btn {
+      background: #1e3c5c;
+      border: none;
+      color: white;
+      padding: 0.5rem 1.4rem;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.15s;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+    }
+
+    .search-btn:hover { background: #123049; }
+
+    /* ----- MAIN LAYOUT ----- */
+    .content-pane {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 2rem 2rem 2.5rem 2rem;
+    }
+
+    /* ----- EDITOR AREA ----- */
+    .editor-area {
+      flex: 2.5;
+      min-width: 300px;
+    }
+
+    .page-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .page-heading .icon-badge {
+      background: #dbe9f5;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+
+    .page-heading h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #0b2a3e;
+    }
+
+    .page-heading p {
+      font-size: 0.9rem;
+      color: #5b7a8e;
+    }
+
+    /* Write form card */
+    .write-card {
+      background: #ffffff;
+      border: 1px solid #e7f0f8;
+      border-radius: 24px;
+      padding: 2rem;
+      box-shadow: 0 6px 12px -8px rgba(30, 60, 80, 0.08);
+    }
+
+    .form-group {
+      margin-bottom: 1.4rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #1d3d52;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.2px;
+    }
+
+    .form-group input[type="text"],
+    .form-group select {
+      width: 100%;
+      border: 1.5px solid #cddde9;
+      border-radius: 14px;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      font-family: inherit;
+      color: #1e2b37;
+      background: #f9fcff;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .form-group input[type="text"]:focus,
+    .form-group select:focus {
+      border-color: #1e3c5c;
+      box-shadow: 0 0 0 3px rgba(30,60,92,0.08);
+      background: white;
+    }
+
+    .form-group input[type="text"]::placeholder {
+      color: #8ca3b7;
+      font-weight: 300;
+    }
+
+    /* Title input — bigger */
+    .title-input {
+      font-size: 1.3rem !important;
+      font-weight: 600 !important;
+      color: #0b2a3e !important;
+      padding: 1rem 1.2rem !important;
+    }
+
+    /* Toolbar */
+    .editor-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      background: #f0f6fb;
+      border: 1.5px solid #cddde9;
+      border-bottom: none;
+      border-radius: 14px 14px 0 0;
+      padding: 0.6rem 0.8rem;
+    }
+
+    .toolbar-btn {
+      background: white;
+      border: 1px solid #cddde9;
+      border-radius: 8px;
+      padding: 0.3rem 0.7rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #264a66;
+      cursor: pointer;
+      transition: 0.12s;
+      font-family: inherit;
+    }
+
+    .toolbar-btn:hover {
+      background: #1e3c5c;
+      color: white;
+      border-color: #1e3c5c;
+    }
+
+    .toolbar-sep {
+      width: 1px;
+      background: #cddde9;
+      margin: 0 0.2rem;
+      align-self: stretch;
+    }
+
+    .content-textarea {
+      width: 100%;
+      min-height: 320px;
+      border: 1.5px solid #cddde9;
+      border-top: none;
+      border-radius: 0 0 14px 14px;
+      padding: 1.2rem;
+      font-size: 1rem;
+      font-family: inherit;
+      color: #1e2b37;
+      background: #f9fcff;
+      outline: none;
+      resize: vertical;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      line-height: 1.8;
+    }
+
+    .content-textarea:focus {
+      border-color: #1e3c5c;
+      box-shadow: 0 0 0 3px rgba(30,60,92,0.08);
+      background: white;
+    }
+
+    .content-textarea::placeholder {
+      color: #8ca3b7;
+      font-weight: 300;
+      font-style: italic;
+    }
+
+    .char-count {
+      text-align: right;
+      font-size: 0.8rem;
+      color: #7a9bb0;
+      margin-top: 0.4rem;
+    }
+
+    /* Two-column row */
+    .form-row {
+      display: flex;
+      gap: 1.2rem;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    /* Tags input */
+    .tags-input-wrapper {
+      border: 1.5px solid #cddde9;
+      border-radius: 14px;
+      padding: 0.5rem 0.8rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      align-items: center;
+      background: #f9fcff;
+      min-height: 48px;
+      cursor: text;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .tags-input-wrapper:focus-within {
+      border-color: #1e3c5c;
+      box-shadow: 0 0 0 3px rgba(30,60,92,0.08);
+      background: white;
+    }
+
+    .tag-chip {
+      background: #dbe9f5;
+      color: #1d4968;
+      padding: 0.2rem 0.8rem;
+      border-radius: 30px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .tag-chip button {
+      background: none;
+      border: none;
+      color: #5b7a8e;
+      cursor: pointer;
+      padding: 0;
+      font-size: 0.9rem;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .tag-chip button:hover { color: #b34a4a; }
+
+    .tags-input-wrapper input {
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 0.9rem;
+      background: transparent;
+      color: #1e2b37;
+      min-width: 120px;
+      flex: 1;
+    }
+
+    .tags-input-wrapper input::placeholder { color: #8ca3b7; }
+
+    /* Cover image upload */
+    .cover-upload {
+      border: 2px dashed #b7d3e9;
+      border-radius: 14px;
+      padding: 2rem;
+      text-align: center;
+      background: #f0f7ff;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+
+    .cover-upload:hover {
+      border-color: #1e3c5c;
+      background: #e4f0fb;
+    }
+
+    .cover-upload .upload-icon { font-size: 2.5rem; margin-bottom: 0.6rem; }
+    .cover-upload p { color: #3a6180; font-size: 0.95rem; }
+    .cover-upload span { font-size: 0.8rem; color: #7a9bb0; }
+
+    /* Cover preview */
+    .cover-preview {
+      display: none;
+      position: relative;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .cover-preview img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 14px;
+    }
+
+    .cover-preview-remove {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(255,255,255,0.9);
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    /* Action buttons row */
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px dashed #c6d9e9;
+    }
+
+    .btn-publish {
+      background: #1e3c5c;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.85rem 2rem;
+      border-radius: 40px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.15s;
+      box-shadow: 0 6px 14px rgba(20,70,100,0.2);
+      font-family: inherit;
+    }
+
+    .btn-publish:hover {
+      background: #0f2d43;
+      transform: translateY(-1px);
+    }
+
+    .btn-draft {
+      background: white;
+      border: 1.5px solid #cddde9;
+      color: #264a66;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 0.85rem 2rem;
+      border-radius: 40px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.15s;
+      font-family: inherit;
+    }
+
+    .btn-draft:hover {
+      background: #edf3f8;
+      border-color: #1e3c5c;
+    }
+
+    .btn-preview {
+      background: #e3f0fb;
+      border: none;
+      color: #1d4a6b;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 0.85rem 1.6rem;
+      border-radius: 40px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: 0.15s;
+      font-family: inherit;
+    }
+
+    .btn-preview:hover { background: #c8dff4; }
+
+    .btn-discard {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: #8ca3b7;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.85rem 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 40px;
+      transition: 0.15s;
+      font-family: inherit;
+    }
+
+    .btn-discard:hover { color: #b34a4a; background: #ffe9e9; }
+
+    /* Success toast */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #1e3c5c;
+      color: white;
+      padding: 1rem 1.6rem;
+      border-radius: 16px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0,30,60,0.2);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 999;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success { background: #1d6b4c; }
+    .toast.draft   { background: #5b4a8e; }
+
+    /* ----- SIDEBAR ----- */
+    .sidebar {
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .sidebar-card {
+      background: #f9fcff;
+      border-radius: 24px;
+      padding: 1.8rem 1.4rem;
+      margin-bottom: 1.8rem;
+      border: 1px solid #e4eef6;
+    }
+
+    .sidebar-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #143e59;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tip-item {
+      display: flex;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+      align-items: flex-start;
+    }
+
+    .tip-icon {
+      font-size: 1.2rem;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .tip-item p {
+      font-size: 0.88rem;
+      color: #3a6180;
+      line-height: 1.5;
+    }
+
+    .tip-item strong {
+      color: #143e59;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .word-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.6rem 0.8rem;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e4eef6;
+    }
+
+    .stat-row span:first-child {
+      font-size: 0.85rem;
+      color: #52758b;
+    }
+
+    .stat-row strong {
+      font-size: 1rem;
+      color: #1e3c5c;
+    }
+
+    .checklist {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .checklist li {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.9rem;
+      color: #3a6180;
+    }
+
+    .checklist li .check {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid #b7d3e9;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+    }
+
+    .checklist li.done .check {
+      background: #1e3c5c;
+      border-color: #1e3c5c;
+      color: white;
+    }
+
+    /* footer */
+    .blog-footer {
+      background: #ecf3fa;
+      padding: 1.5rem 2rem;
+      font-size: 0.9rem;
+      color: #335f7a;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #c8ddec;
+    }
+
+    .footer-links span {
+      margin-right: 1.8rem;
+      cursor: pointer;
+      color: #2a5779;
+      font-weight: 450;
+    }
+
+    .footer-links span:hover { color: #1e3c5c; }
+
+    /* responsive */
+    @media (max-width: 700px) {
+      .top-bar { flex-direction: column; align-items: stretch; }
+      .search-section { width: 100%; }
+      .content-pane { flex-direction: column; }
+      .form-row { flex-direction: column; }
+      .form-actions { flex-direction: column; }
+      .btn-discard { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+<div class="blog-wrapper">
+  <!-- header -->
+  <header class="top-bar">
+    <a href="index.html" class="logo-area">
+      <div class="logo-icon">✎</div>
+      <div class="logo-text">
+        <h1>pen & page</h1>
+        <p>simple thoughts</p>
+      </div>
+    </a>
+
+    <nav class="nav-links">
+      <a href="index.html" class="nav-btn"><i>📘</i> Home</a>
+      <a href="posts.html" class="nav-btn"><i>📰</i> Posts</a>
+      <a href="write.html" class="nav-btn active"><i>✍️</i> Write</a>
+      <a href="saved.html" class="nav-btn"><i>🔖</i> Saved</a>
+    </nav>
+
+    <div class="search-section">
+      <input type="text" placeholder="Search posts, topics..." aria-label="search">
+      <button class="search-btn">Go</button>
+    </div>
+  </header>
+
+  <!-- main area -->
+  <div class="content-pane">
+
+    <!-- EDITOR -->
+    <main class="editor-area">
+      <div class="page-heading">
+        <div class="icon-badge">✍️</div>
+        <div>
+          <h2>Write a New Post</h2>
+          <p>Share your story with the world</p>
+        </div>
+      </div>
+
+      <div class="write-card">
+
+        <!-- Cover Image -->
+        <div class="form-group">
+          <label>Cover Image</label>
+          <div class="cover-upload" id="coverUpload" onclick="document.getElementById('coverInput').click()">
+            <div class="upload-icon">🖼️</div>
+            <p>Click to upload a cover image</p>
+            <span>PNG, JPG, WebP up to 5MB</span>
+          </div>
+          <div class="cover-preview" id="coverPreview">
+            <img id="coverImg" src="" alt="Cover preview">
+            <button class="cover-preview-remove" onclick="removeCover()" title="Remove image">✕</button>
+          </div>
+          <input type="file" id="coverInput" accept="image/*" style="display:none" onchange="previewCover(event)">
+        </div>
+
+        <!-- Post Title -->
+        <div class="form-group">
+          <label for="postTitle">Post Title</label>
+          <input type="text" id="postTitle" class="title-input" placeholder="Write a compelling title…" oninput="updateStats()">
+        </div>
+
+        <!-- Category & Read Time -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="postCategory">Category</label>
+            <select id="postCategory">
+              <option value="">— Select a category —</option>
+              <option value="technology">💻 Technology</option>
+              <option value="design">🎨 Design</option>
+              <option value="lifestyle">🧘 Lifestyle</option>
+              <option value="health">🏥 Health</option>
+              <option value="travel">✈️ Travel</option>
+              <option value="business">💼 Business</option>
+              <option value="journal">📔 Journal</option>
+              <option value="writing-tips">✨ Writing Tips</option>
+              <option value="coding">🖥️ Coding</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="postReadTime">Estimated Read Time</label>
+            <select id="postReadTime">
+              <option value="1">1 min read</option>
+              <option value="2">2 min read</option>
+              <option value="3" selected>3 min read</option>
+              <option value="4">4 min read</option>
+              <option value="5">5 min read</option>
+              <option value="8">8 min read</option>
+              <option value="10">10 min read</option>
+              <option value="15">15+ min read</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Excerpt -->
+        <div class="form-group">
+          <label for="postExcerpt">Short Excerpt <span style="font-weight:400; color:#7a9bb0;">(shown in post cards)</span></label>
+          <input type="text" id="postExcerpt" placeholder="A one-line summary of your post…" oninput="updateStats()">
+        </div>
+
+        <!-- Tags -->
+        <div class="form-group">
+          <label>Tags</label>
+          <div class="tags-input-wrapper" id="tagsWrapper">
+            <input type="text" id="tagInput" placeholder="Type a tag and press Enter…" onkeydown="handleTagInput(event)">
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="form-group">
+          <label>Content</label>
+          <div class="editor-toolbar">
+            <button class="toolbar-btn" onclick="formatText('bold')" title="Bold"><b>B</b></button>
+            <button class="toolbar-btn" onclick="formatText('italic')" title="Italic"><i>I</i></button>
+            <button class="toolbar-btn" onclick="formatText('underline')" title="Underline"><u>U</u></button>
+            <div class="toolbar-sep"></div>
+            <button class="toolbar-btn" title="Heading">H1</button>
+            <button class="toolbar-btn" title="Heading 2">H2</button>
+            <div class="toolbar-sep"></div>
+            <button class="toolbar-btn" title="Bullet list">• List</button>
+            <button class="toolbar-btn" title="Numbered list">1. List</button>
+            <div class="toolbar-sep"></div>
+            <button class="toolbar-btn" title="Quote">❝ Quote</button>
+            <button class="toolbar-btn" title="Code">{ } Code</button>
+            <div class="toolbar-sep"></div>
+            <button class="toolbar-btn" title="Link">🔗 Link</button>
+            <button class="toolbar-btn" title="Image">🖼️ Image</button>
+          </div>
+          <textarea
+            class="content-textarea"
+            id="postContent"
+            placeholder="Start writing your story here… tell it your way, at your own pace."
+            oninput="updateStats()"
+          ></textarea>
+          <div class="char-count" id="charCount">0 words · 0 characters</div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="form-actions">
+          <button class="btn-publish" onclick="publishPost()">🚀 Publish Post</button>
+          <button class="btn-draft" onclick="saveDraft()">💾 Save as Draft</button>
+          <button class="btn-preview" onclick="previewPost()">👁️ Preview</button>
+          <button class="btn-discard" onclick="discardPost()">🗑️ Discard</button>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <!-- Live Stats -->
+      <div class="sidebar-card">
+        <div class="sidebar-title">📊 Live Stats</div>
+        <div class="word-stats">
+          <div class="stat-row">
+            <span>Words</span>
+            <strong id="statWords">0</strong>
+          </div>
+          <div class="stat-row">
+            <span>Characters</span>
+            <strong id="statChars">0</strong>
+          </div>
+          <div class="stat-row">
+            <span>Paragraphs</span>
+            <strong id="statParas">0</strong>
+          </div>
+          <div class="stat-row">
+            <span>Est. Read Time</span>
+            <strong id="statRead">— min</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Publishing Checklist -->
+      <div class="sidebar-card">
+        <div class="sidebar-title">✅ Checklist</div>
+        <ul class="checklist" id="checklist">
+          <li id="check-title">
+            <div class="check">✓</div>
+            <span>Post title added</span>
+          </li>
+          <li id="check-excerpt">
+            <div class="check">✓</div>
+            <span>Excerpt written</span>
+          </li>
+          <li id="check-content">
+            <div class="check">✓</div>
+            <span>Content (min. 50 words)</span>
+          </li>
+          <li id="check-category">
+            <div class="check">✓</div>
+            <span>Category selected</span>
+          </li>
+          <li id="check-tags">
+            <div class="check">✓</div>
+            <span>At least one tag</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Writing Tips -->
+      <div class="sidebar-card" style="background:#f0f7

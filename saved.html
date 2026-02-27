@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saved · pen & page</title>
+  <style>
+    /* ----- RESET / BASE ----- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #f4f7fb;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #1e2b37;
+      padding: 2rem 1rem;
+    }
+
+    .blog-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px -12px rgba(0,20,30,0.15);
+      overflow: hidden;
+    }
+
+    /* ----- HEADER & NAV ----- */
+    .top-bar {
+      background: #ffffffdd;
+      backdrop-filter: blur(4px);
+      border-bottom: 1px solid #e4eef8;
+      padding: 1rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.2rem 2rem;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      background: #1e3c5c;
+      color: white;
+      font-weight: 600;
+      font-size: 1.6rem;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      box-shadow: 0 6px 10px rgba(0,60,100,0.1);
+    }
+
+    .logo-text h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      color: #0b2a3e;
+    }
+
+    .logo-text p {
+      font-size: 0.8rem;
+      color: #5b6f80;
+      font-weight: 400;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.2rem;
+      background: #edf3f8;
+      padding: 0.3rem;
+      border-radius: 60px;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      padding: 0.6rem 1.4rem;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #264a66;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+
+    .nav-btn i { font-style: normal; font-weight: 400; font-size: 1.2rem; }
+
+    .nav-btn:hover {
+      background: #dae6f0;
+      color: #0f344d;
+    }
+
+    .nav-btn.active {
+      background: white;
+      color: #0c2f46;
+      box-shadow: 0 2px 8px rgba(0,35,60,0.1);
+    }
+
+    .search-section {
+      display: flex;
+      align-items: center;
+      background: white;
+      border: 1px solid #cddde9;
+      border-radius: 50px;
+      padding: 0.2rem 0.2rem 0.2rem 1.2rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+      min-width: 240px;
+    }
+
+    .search-section input {
+      border: none;
+      padding: 0.5rem 0;
+      font-size: 0.95rem;
+      background: transparent;
+      width: 100%;
+      outline: none;
+      color: #1f3c4f;
+    }
+
+    .search-section input::placeholder {
+      color: #8ca3b7;
+      font-weight: 300;
+    }
+
+    .search-btn {
+      background: #1e3c5c;
+      border: none;
+      color: white;
+      padding: 0.5rem 1.4rem;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: 0.15s;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+    }
+
+    .search-btn:hover { background: #123049; }
+
+    /* ----- MAIN LAYOUT ----- */
+    .content-pane {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      padding: 2rem 2rem 2.5rem 2rem;
+    }
+
+    .saved-area {
+      flex: 2.5;
+      min-width: 300px;
+    }
+
+    /* ----- PAGE HEADING ----- */
+    .page-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.8rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .heading-left {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .icon-badge {
+      background: #fff4e0;
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      border: 1px solid #f5dfa0;
+    }
+
+    .page-heading h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #0b2a3e;
+    }
+
+    .page-heading p {
+      font-size: 0.9rem;
+      color: #5b7a8e;
+    }
+
+    .clear-all-btn {
+      background: #fff0f0;
+      border: 1.5px solid #f5c6c6;
+      color: #b34a4a;
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 0.5rem 1.2rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: 0.15s;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .clear-all-btn:hover {
+      background: #ffe0e0;
+      border-color: #e08080;
+    }
+
+    /* ----- FILTER TABS ----- */
+    .filter-tabs {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.6rem;
+      background: #edf3f8;
+      padding: 0.35rem;
+      border-radius: 50px;
+      width: fit-content;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #264a66;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: 0.15s;
+      font-family: inherit;
+    }
+
+    .tab-btn:hover { background: #dae6f0; }
+
+    .tab-btn.active {
+      background: white;
+      color: #0c2f46;
+      box-shadow: 0 2px 8px rgba(0,35,60,0.1);
+    }
+
+    /* ----- SAVED POST CARD ----- */
+    .post-card {
+      background: #ffffff;
+      border: 1px solid #e7f0f8;
+      border-radius: 24px;
+      padding: 1.6rem;
+      margin-bottom: 1.4rem;
+      box-shadow: 0 6px 12px -8px rgba(30,60,80,0.08);
+      transition: 0.2s;
+      position: relative;
+    }
+
+    .post-card:hover {
+      border-color: #cbdbe9;
+      box-shadow: 0 12px 22px -12px rgba(20,60,90,0.18);
+    }
+
+    .post-card .saved-badge {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      background: #fff4e0;
+      border: 1px solid #f5dfa0;
+      color: #c67e1b;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.7rem;
+      border-radius: 30px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .post-meta {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      font-size: 0.85rem;
+      color: #52758b;
+      margin-bottom: 0.6rem;
+      flex-wrap: wrap;
+      padding-right: 5rem;
+    }
+
+    .post-meta .date::before {
+      content: "📅 ";
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    .post-meta .author::before {
+      content: "✍️ ";
+      font-size: 0.9rem;
+    }
+
+    .post-meta .saved-on::before {
+      content: "🔖 Saved: ";
+      font-size: 0.9rem;
+      color: #c67e1b;
+    }
+
+    .post-category {
+      background: #e5eef8;
+      padding: 0.2rem 0.8rem;
+      border-radius: 30px;
+      font-weight: 500;
+      color: #23577b;
+    }
+
+    .post-title {
+      font-size: 1.45rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      margin: 0.4rem 0 0.7rem 0;
+      color: #102c3e;
+      line-height: 1.3;
+    }
+
+    .post-excerpt {
+      color: #385b72;
+      margin-bottom: 1.2rem;
+      font-size: 0.97rem;
+    }
+
+    .post-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      border-top: 1px dashed #c6d9e9;
+      padding-top: 1rem;
+      margin-top: 0.4rem;
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #2d5a7c;
+      cursor: pointer;
+      padding: 0.3rem 0.6rem;
+      border-radius: 30px;
+      transition: 0.1s;
+      font-family: inherit;
+    }
+
+    .action-btn.read:hover    { background: #e2effa; color: #1c4d72; }
+    .action-btn.share:hover   { background: #e3f0ea; color: #1d6b4c; }
+    .action-btn.remove:hover  { background: #ffe9e9; color: #b34a4a; }
+
+    /* ----- EMPTY STATE ----- */
+    .empty-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #5b7a8e;
+    }
+
+    .empty-state .empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1.2rem;
+      opacity: 0.6;
+    }
+
+    .empty-state h3 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #1d3d52;
+      margin-bottom: 0.5rem;
+    }
+
+    .empty-state p {
+      font-size: 0.95rem;
+      max-width: 340px;
+      margin-bottom: 1.6rem;
+    }
+
+    .empty-state a {
+      background: #1e3c5c;
+      color: white;
+      padding: 0.8rem 2rem;
+      border-radius: 40px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: 0.15s;
+      font-size: 0.95rem;
+    }
+
+    .empty-state a:hover { background: #0f2d43; }
+
+    /* ----- SIDEBAR ----- */
+    .sidebar {
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .sidebar-card {
+      background: #f9fcff;
+      border-radius: 24px;
+      padding: 1.8rem 1.4rem;
+      margin-bottom: 1.8rem;
+      border: 1px solid #e4eef6;
+    }
+
+    .sidebar-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #143e59;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+    }
+
+    .stat-box {
+      background: white;
+      border: 1px solid #e4eef6;
+      border-radius: 16px;
+      padding: 1rem 0.8rem;
+      text-align: center;
+    }
+
+    .stat-box .stat-num {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #1e3c5c;
+      line-height: 1;
+    }
+
+    .stat-box .stat-lbl {
+      font-size: 0.78rem;
+      color: #52758b;
+      margin-top: 0.3rem;
+    }
+
+    .category-list {
+      list-style: none;
+    }
+
+    .category-list li {
+      padding: 0.65rem 0;
+      border-bottom: 1px solid #cde0ed;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 450;
+      color: #1f4d6b;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+
+    .category-list li:hover { padding-left: 6px; color: #1e3c5c; }
+    .category-list li:last-child { border: none; }
+
+    .badge {
+      background: #b7d3e9;
+      padding: 0.15rem 0.6rem;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-left: auto;
+      color: #1a3f59;
+    }
+
+    .collections-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .collection-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: white;
+      border: 1px solid #e4eef6;
+      border-radius: 14px;
+      padding: 0.7rem 1rem;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+
+    .collection-item:hover {
+      border-color: #1e3c5c;
+      background: #f0f7ff;
+    }
+
+    .collection-item .col-icon {
+      font-size: 1.2rem;
+      width: 36px;
+      height: 36px;
+      background: #edf3f8;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .collection-item .col-name {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #1d3d52;
+    }
+
+    .collection-item .col-count {
+      font-size: 0.78rem;
+      color: #52758b;
+    }
+
+    .collection-item .badge {
+      margin-left: auto;
+    }
+
+    .new-collection-btn {
+      width: 100%;
+      background: #f0f7ff;
+      border: 1.5px dashed #b7d3e9;
+      color: #1d4a6b;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 0.7rem 1rem;
+      border-radius: 14px;
+      cursor: pointer;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: 0.15s;
+      margin-top: 0.6rem;
+    }
+
+    .new-collection-btn:hover {
+      background: #ddeeff;
+      border-color: #1e3c5c;
+    }
+
+    /* ----- TOAST ----- */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #b34a4a;
+      color: white;
+      padding: 0.9rem 1.4rem;
+      border-radius: 14px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0,30,60,0.15);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 999;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* ----- FOOTER ----- */
+    .blog-footer {
+      background: #ecf3fa;
+      padding: 1.5rem 2rem;
+      font-size: 0.9rem;
+      color: #335f7a;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #c8ddec;
+    }
+
+    .footer-links span {
+      margin-right: 1.8rem;
+      cursor: pointer;
+      color: #2a5779;
+      font-weight: 450;
+    }
+
+    .footer-links span:hover { color: #1e3c5c; }
+
+    /* ----- RESPONSIVE ----- */
+    @media (max-width: 700px) {
+      .top-bar { flex-direction: column; align-items: stretch; }
+      .search-section { width: 100%; }
+      .content-pane { flex-direction: column; }
+      .page-heading { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+<div class="blog-wrapper">
+
+  <!-- ===== HEADER ===== -->
+  <header class="top-bar">
+    <a href="index.html" class="logo-area">
+      <div class="logo-icon">✎</div>
+      <div class="logo-text">
+        <h1>pen & page</h1>
+        <p>simple thoughts</p>
+      </div>
+    </a>
+
+    <nav class="nav-links">
+      <a href="index.html"  class="nav-btn"><i>📘</i> Home</a>
+      <a href="posts.html"  class="nav-btn"><i>📰</i> Posts</a>
+      <a href="write.html"  class="nav-btn"><i>✍️</i> Write</a>
+      <a href="saved.html"  class="nav-btn active"><i>🔖</i> Saved</a>
+    </nav>
+
+    <div class="search-section">
+      <input type="text" placeholder="Search saved posts…" aria-label="search" id="searchInput" oninput="filterSaved()">
+      <button class="search-btn">Go</button>
+    </div>
+  </header>
+
+  <!-- ===== MAIN ===== -->
+  <div class="content-pane">
+
+    <main class="saved-area">
+
+      <!-- Page Heading -->
+      <div class="page-heading">
+        <div class="heading-left">
+          <div class="icon-badge">🔖</div>
+          <div>
+            <h2>Saved Posts</h2>
+            <p id="savedCount">6 posts bookmarked</p>
+          </div>
+        </div>
+        <button class="clear-all-btn" onclick="clearAll()">🗑️ Clear All</button>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="filter-tabs">
+        <button class="tab-btn active" onclick="switchTab(this,'all')">All Saved</button>
+        <button class="tab-btn" onclick="switchTab(this,'design')">Design</button>
+        <button class="tab-btn" onclick="switchTab(this,'technology')">Technology</button>
+        <button class="tab-btn" onclick="switchTab(this,'health')">Health</button>
+        <button class="tab-btn" onclick="switchTab(this,'lifestyle')">Lifestyle</button>
+      </div>
+
+      <!-- Saved Posts List -->
+      <div id="savedList">
+
+        <!-- Card 1 -->
+        <article class="post-card" data-category="design">
+          <div class="saved-badge">🔖 Saved</div>
+          <div class="post-meta">
+            <span class="date">March 10, 2025</span>
+            <span class="author">by Sarah Chen</span>
+            <span class="post-category">design</span>
+            <span class="saved-on">today</span>
+          </div>
+          <h2 class="post-title">Interior Design Trends 2026</h2>
+          <p class="post-excerpt">
+            The most beautiful homes in 2026 don't scream "I'm on trend"—they whisper "this is who lives here."
+            Start with what brings you joy, comfort, and memories. Layer in one or two current ideas that resonate.
+          </p>
+          <div class="post-actions">
+            <button class="action-btn read"><i>📖</i> Read Now</button>
+            <button class="action-btn share"><i>↗️</i> Share</button>
+            <span style="flex:1; text-align:right; font-size:0.85rem; color:#517e9b;">3 min read</span>
+            <button class="action-btn remove" onclick="removeCard(this)">✕ Remove</button>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="post-card" data-category="technology">
+          <div class="saved-badge">🔖 Saved</div>
+          <div class="post-meta">
+            <span class="date">March 8, 2025</span>
+            <span class="author">by Marcus Lee</span>
+            <span class="post-category">technology</span>
+            <span class="saved-on">2 days ago</span>
+          </div>
+          <h2 class="post-title">The Future of AI in Web Development</h2>
+          <p class="post-excerpt">
+            Artificial intelligence is reshaping how we build websites. From automated testing to intelligent design
+            suggestions, AI tools are becoming an indispensable part of the modern developer's toolkit.
+          </p>
+          <div class="post-actions">
+            <button class="action-btn read"><i>📖</i> Read Now</button>
+            <button class="action-btn share"><i>↗️</i> Share</button>
+            <span style="flex:1; text-align:right; font-size:0.85rem; color:#517e9b;">6 min read</span>
+            <button class="action-btn remove" onclick="removeCard(this)">✕ Remove</button>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="post-card" data-category="health">
+          <div class="saved-badge">🔖 Saved</div>
+          <div class="post-meta">
+            <span class="date">February 27, 2025</span>
+            <span class="author">by Alex Thompson</span>
+            <span class="post-category">health</span>
+            <span class="saved-on">5 days ago</span>
+          </div>
+          <h2 class="post-title">Health and Fitness for Busy Professionals</h2>
+          <p class="post-excerpt">
+            In 2026, the fitness conversation has shifted away from extreme routines toward something more
+            grounded—sustainable movement that supports both body and mind, especially for people whose days are packed.
+          </p>
+          <div class="post-actions">
+            <button class="action-btn read"><i>📖</i> Read Now</button>
+            <button class="action-btn share"><i>↗️</i> Share</button>
+            <span style="flex:1; text-align:right; font-size:0.85rem; color:#517e9b;">5 min read</span>
+            <button class="action-btn remove" onclick="removeCard(this)">✕ Remove</button>
+          </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="post-card" data-category="lifestyle">
+          <div class="saved-badge">🔖 Saved</div>
+          <div class="post-meta">
+            <span class="date">February 10, 2025</span>
+            <span class="author">by Lisa Wang</span>
+            <span class="post-category">lifestyle</span>
+            <span class="saved-on">1 week ago</span>
+          </div>
+          <h2 class="post-title">Minimalism: Less Stuff, More Life</h2>
+          <p class="post-excerpt">
+            Minimalism isn't about having nothing—it's about making room for what matters. After a year of intentional
+            living, here are the lessons I've learned about letting go and living with purpose.
+          </p>
+          <div class="post-actions">
+            <button class="action-btn read"><i>📖</i> Read Now</button>
+            <button class="action-btn share"><i>↗️</i> Share</button>
+            <span style="flex:1; text-align:right; font-size:0.85rem; color:#517e9b;">5 min read</span>
+            <button class="action-btn remove" onclick="removeCard(this)">✕ Remove</button>
+          </div>
+        </article>
+
+        <!-- Card 5 -->
+        <article class="post-card" data-category="technology">
+          <div class="saved-badge">🔖 Saved</div>
+          <div class="post-meta">
+            <span class="date">February 15, 2025</span>
+            <span class="author">by David Kim</span>
+            <span class="post-category">coding</span>
+            <span class="saved-on">2 weeks ago</span>
+          </div>
+          <h2 class="post-title">Clean Code Principles Every Developer Should Know</h2>
+          <p class="post-excerpt">
+            Writing code that works is one thing. Writing code that your future self and teammates will thank you for
+            is another. Let's explore the fundamental principles that separate good code from great code.
+          </p>
+          <div class="post-actions">
+            <button class="action-btn read"><i>📖</i> Read Now</button>
+            <button class="action-btn share"><i>↗️</i> Share</button>
+            <span style="flex:1; text-align:right; font-size:0.85rem; color:#517e9b;">8 min read</span>
+            <button class="action-btn remove" onclick="removeCard(this)">✕ Remove</button>
+          </div>
+        </article>
+
+        <!-- Card 6 -->
+        <article class="post-card" data-category="design">
+          <div class="saved-badge">🔖 Saved</div>
+          <div class="post-meta">
+            <span class="date">January 30, 2025</span>
+            <span class="author">by Nina Patel</span>
+            <span class="post-category">design</span>
+            <span class="saved-on">3 weeks ago</span>
+          </div>
+          <h2 class="post-title">Typography Secrets That Make Websites Shine</h2>
+          <p class="post-excerpt">
+            Typography is the silent ambassador of your brand. The right font choices, spacing, and hierarchy can
+            transform an ordinary webpage into an extraordinary experience that keeps readers coming back.
+          </p>
+          <div class="post-actions">
+            <button class="action-btn read"><i>📖</i> Read Now</button>
+            <button class="action-btn share"><i>↗️</i> Share</button>
+            <span style="flex:1; text-align:right; font-size:0.85rem; color:#517e9b;">4 min read</span>
+            <button class="action-btn remove" onclick="removeCard(this)">✕ Remove</button>
+          </div>
+        </article>
+
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">🔖</div>
+        <h3>Nothing saved yet</h3>
+        <p>When you bookmark posts from the feed, they'll appear here for easy reading later.</p>
+        <a href="posts.html">Browse Posts</a>
+      </div>
+
+    </main>
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar">
+
+      <!-- Reading Stats -->
+      <div class="sidebar-card">
+        <div class="sidebar-title">📊 Your Stats</div>
+        <div class="stats-grid">
+          <div class="stat-box">
+            <div class="stat-num" id="totalSaved">6</div>
+            <div class="stat-lbl">Saved Posts</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">31</div>
+            <div class="stat-lbl">Total Min</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num">3</div>
+            <div class="stat-lbl">Categories</div>
