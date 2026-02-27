@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to withyou</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Updated to match the "pen & page" / "withyou" palette */
+            --ink: #1e2b37;       /* Dark Navy */
+            --paper: #f4f7fb;     /* Pale Cool Blue */
+            --accent: #1e3c5c;    /* Deep Professional Blue */
+            --accent-soft: #007bff; /* Bright Action Blue */
+            --border: #cddde9;    /* Muted Blue-Gray Border */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--paper);
+            color: var(--ink);
+            overflow: hidden;
+        }
+
+        /* ── BACKGROUND ANIMATION ── */
+        .splash-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 20px;
+            /* Subtle glassmorphism on the main container */
+            background: radial-gradient(circle at center, rgba(255,255,255,0.8) 0%, rgba(244,247,251,0) 70%);
+        }
+
+        /* ── CONTENT ── */
+        .logo-mark {
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--accent-soft);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInDown 1s ease forwards;
+        }
+
+        .main-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+            color: var(--accent);
+        }
+
+        .main-heading span {
+            display: block;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 0.8s ease forwards;
+        }
+
+        .main-heading span:nth-child(2) {
+            animation-delay: 0.3s;
+            font-style: italic;
+            color: var(--ink);
+        }
+
+        .sub-text {
+            font-size: 1.1rem;
+            color: #52758b; /* Slate Blue from your blog feed */
+            max-width: 550px;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeIn 1.5s ease forwards;
+            animation-delay: 1s;
+        }
+
+        /* ── ENTER BUTTON ── */
+        .enter-btn {
+            text-decoration: none;
+            padding: 16px 40px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50px; /* Rounded pill shape to match search bar */
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            font-size: 0.9rem;
+            position: relative;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards;
+            animation-delay: 1.5s;
+            box-shadow: 0 10px 20px rgba(30, 60, 92, 0.2);
+        }
+
+        .enter-btn:hover {
+            background-color: var(--accent-soft);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 123, 255, 0.3);
+        }
+
+        /* ── FOOTER CREDIT ── */
+        .splash-footer {
+            position: absolute;
+            bottom: 40px;
+            font-size: 0.75rem;
+            color: #8ca3b7;
+            letter-spacing: 0.1em;
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        /* Decorative circles updated to soft blue glares */
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--accent-soft);
+            filter: blur(100px);
+            opacity: 0.08;
+            z-index: -1;
+        }
+        .c1 { width: 500px; height: 500px; top: -150px; left: -100px; }
+        .c2 { width: 400px; height: 400px; bottom: -100px; right: -50px; background: var(--accent); }
+    </style>
+</head>
+<body>
+
+    <div class="splash-container">
+        <div class="circle c1"></div>
+        <div class="circle c2"></div>
+
+        <div class="logo-mark">Inventor Bro's</div>
+        
+        <h1 class="main-heading">
+            <span>The depth of thought,</span>
+            <span>captured in ink.</span>
+        </h1>
+
+        <p class="sub-text">
+            A digital sanctuary for modern technology, full-stack insights, and clean design.
+        </p>
+
+        <a href="index.html" class="enter-btn">Enter Experience</a>
+
+        <div class="splash-footer">
+            © 2026 withyou. All rights reserved.
+        </div>
+    </div>
+
+</body>
+</html>
